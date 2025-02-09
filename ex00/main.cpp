@@ -3,9 +3,10 @@
 int main(int ac, char **av)
 {
     stru btc;
-
-    if (ac == 2){
-        sort_data(&btc, av);
+    (void)av;
+    if (ac){
+        sort_data(&btc);
+        read_input(av[1], &btc);;
     }
     else
         std::cout << "error: number of arg" << std::endl;
