@@ -15,11 +15,16 @@ struct stru {
     std::string date;
     std::string value;
     float val;
+    int year;
+    int months;
+    int days;
 };
 
 void sort_data(stru *e);
 void print_map(std::map<std::string, float> &c);
 void read_input(char *av, stru *c);
+int  pars(stru *btc);
+int  parsval(stru *btc);
 
 
 #endif
