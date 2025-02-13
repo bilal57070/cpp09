@@ -18,6 +18,8 @@ struct stru {
     int year;
     int months;
     int days;
+    int datecsvfused;
+    int dateinputfused;
 };
 
 void sort_data(stru *e);
@@ -25,6 +27,8 @@ void print_map(std::map<std::string, float> &c);
 void read_input(char *av, stru *c);
 int  pars(stru *btc);
 int  parsval(stru *btc);
-
+void fusecsv(std::string date, stru *btc);
+void fuseinput(stru *btc);
+void apply_ExRate(stru *btc);
 
 #endif

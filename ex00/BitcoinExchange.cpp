@@ -18,6 +18,7 @@ void    sort_data(stru *btc){
                     exit(1);
                 }
                 date = line.substr(0, found);
+                fusecsv(date, btc);
                 value = line.substr(found + 1);
                 std::istringstream iss(value);
                 if (!(iss >> val))
@@ -28,6 +29,14 @@ void    sort_data(stru *btc){
         }
     }
     //print_map(btc->data);
+}
+
+void fusecsv(std::string date, stru *btc){
+    date.erase(4, 1);
+    date.erase(6, 1);
+    std::cout << date << std::endl;
+    btc->datecsvfused = atoi(date.c_str());
+    std::cout << "date int :: " << btc->datecsvfused << std::endl;
 }
 
 /*void print_map(std::map<std::string, float> &c){
@@ -67,8 +76,9 @@ void read_input(char *input, stru *btc){
                     std::cout << "error: not a positive number" << std::endl;
                     continue;
                 }
-                if (pars(btc) == 1 && parsval(btc) == 1)
+                if (pars(btc) == 1 || parsval(btc) == 1)
                     continue;
+                fuseinput(btc);
             }
             veski++;
         }
@@ -153,4 +163,15 @@ int parsval(stru *btc){
         return 1;
     }
     return 0;
+}
+
+void fuseinput(stru *btc){
+    btc->date.erase(4, 1);
+    btc->date.erase(6, 1);
+    btc->dateinputfused = atoi(btc->date.c_str());
+    //std::cout << btc->date << " l'inuput fused : " << btc->dateinputfused << std::endl;
+}
+
+void apply_ExRate(stru *btc){
+
 }
