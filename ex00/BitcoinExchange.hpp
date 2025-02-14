@@ -10,7 +10,8 @@
 
 
 struct stru {
-    std::map<std::string, float> data;
+    std::map<int, float> data;
+    std::string datecsv;
     std::string line;
     std::string date;
     std::string value;

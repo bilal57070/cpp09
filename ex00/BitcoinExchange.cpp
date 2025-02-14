@@ -4,7 +4,6 @@ void    sort_data(stru *btc){
     std::ifstream input("./data.csv");
     std::string line;
     size_t      found;
-    std::string date;
     std::string value;
     float         val;
     int veski = 0;
@@ -17,13 +16,13 @@ void    sort_data(stru *btc){
                     std::cout << "error no coma in input" << std::endl;
                     exit(1);
                 }
-                date = line.substr(0, found);
-                fusecsv(date, btc);
+                btc->datecsv = line.substr(0, found);
+                fusecsv(btc->datecsv, btc);
                 value = line.substr(found + 1);
                 std::istringstream iss(value);
                 if (!(iss >> val))
                     std::cout << "error conversion" << std::endl;
-                btc->data[date] = val;
+                btc->data[btc->datecsvfused] = val;
             }
             veski++;
         }
@@ -34,9 +33,9 @@ void    sort_data(stru *btc){
 void fusecsv(std::string date, stru *btc){
     date.erase(4, 1);
     date.erase(6, 1);
-    std::cout << date << std::endl;
+    //std::cout << date << std::endl;
     btc->datecsvfused = atoi(date.c_str());
-    std::cout << "date int :: " << btc->datecsvfused << std::endl;
+    //std::cout << "date int :: " << btc->datecsvfused << std::endl;
 }
 
 /*void print_map(std::map<std::string, float> &c){
@@ -79,6 +78,7 @@ void read_input(char *input, stru *btc){
                 if (pars(btc) == 1 || parsval(btc) == 1)
                     continue;
                 fuseinput(btc);
+                apply_ExRate(btc);
             }
             veski++;
         }
@@ -109,14 +109,14 @@ int pars(stru *btc){
     btc->months = atoi(m.c_str());
     btc->days = atoi(d.c_str());
 
-    std::cout << y << std::endl;
+    //std::cout << y << std::endl;
     for (int i = 0; i < 4; i++){
         if (!(isdigit(y[i])) || (btc->year > 2025 || btc->year < 2009)){
             std::cout << "years not right" << std::endl;
             return 1;
         }
     }
-    std::cout << "survivor" << std::endl;
+    //std::cout << "survivor" << std::endl;
     for (int i = 0; i < 2; i++){
         if (!(isdigit(m[i])) || (btc->months > 12 || btc->months < 0)){
             std::cout << "months not right" << std::endl;
@@ -139,7 +139,7 @@ int pars(stru *btc){
             std::cout << "day doesnt exist" << std::endl;
             return 1;
         }
-    if ((btc->months == 2)){
+    if (btc->months == 2){
         if (((btc->year % 4 == 0 && btc->year % 100 != 0) || (btc->year % 400 == 0)) && (btc->days > 29 || btc->days < 1)){
             std::cout << "febrary is not right" << std::endl;
             return 1;
@@ -173,5 +173,23 @@ void fuseinput(stru *btc){
 }
 
 void apply_ExRate(stru *btc){
-
+    std::map<int, float>::iterator it;
+    it = btc->data.find(btc->dateinputfused);
+    std::string convertit;
+    if (it != btc->data.end()){
+        btc->date.insert(4, "-");
+        btc->date.insert(7, "-");
+        std::cout << btc->date << " => " << btc->val << " = " << btc->val * it->second << std::endl;
+    }
+    else{
+        it = btc->data.lower_bound(btc->dateinputfused);
+        it--;
+        if (it != btc->data.end()){
+            btc->date.insert(4, "-");
+            btc->date.insert(7, "-");
+            std::cout << btc->date << " => " << btc->val << " = " << btc->val * it->second << std::endl;
+        }
+        else
+            std::cout << "no element foundable" << std::endl;
+    }
 }
