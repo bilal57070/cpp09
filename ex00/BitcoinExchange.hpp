@@ -10,7 +10,6 @@
 
 
 struct stru {
-    std::map<int, float> data;
     std::string datecsv;
     std::string line;
     std::string date;
@@ -23,13 +22,24 @@ struct stru {
     int dateinputfused;
 };
 
-void sort_data(stru *e);
-void print_map(std::map<std::string, float> &c);
-void read_input(char *av, stru *c);
-int  pars(stru *btc);
-int  parsval(stru *btc);
-void fusecsv(std::string date, stru *btc);
-void fuseinput(stru *btc);
-void apply_ExRate(stru *btc);
+class btc{
+    public:
+        btc();
+        ~btc();
+        btc(btc const &cp);
+        btc& operator=(btc const &cpi);
+
+        void sort_data(stru *e);
+        void print_map(std::map<std::string, float> &c);
+        void read_input(char *av, stru *c);
+        int  pars(stru *btc);
+        int  parsval(stru *btc);
+        void fusecsv(std::string date, stru *btc);
+        void fuseinput(stru *btc);
+        void apply_ExRate(stru *btc);
+
+    private:
+        std::map<int, float> data;
+};
 
 #endif

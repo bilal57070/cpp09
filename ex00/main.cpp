@@ -2,11 +2,12 @@
 
 int main(int ac, char **av)
 {
-    stru btc;
+    stru bt;
+    btc Btc;
     (void)av;
     if (ac){
-        sort_data(&btc);
-        read_input(av[1], &btc);
+        Btc.sort_data(&bt);
+        Btc.read_input(av[1], &bt);
     }
     else
         std::cout << "error: number of arg" << std::endl;

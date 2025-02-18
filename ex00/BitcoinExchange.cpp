@@ -1,6 +1,21 @@
 #include "BitcoinExchange.hpp"
 
-void    sort_data(stru *btc){
+
+btc::btc(){}
+
+btc::~btc(){}
+
+btc::btc(btc const &cp){
+    *this = cp;
+}
+
+btc&    btc::operator=(btc const &cp){
+    if (data != cp.data)
+        data = cp.data;
+    return *this;
+}
+
+void    btc::sort_data(stru *btc){
     std::ifstream input("./data.csv");
     std::string line;
     size_t      found;
@@ -22,7 +37,7 @@ void    sort_data(stru *btc){
                 std::istringstream iss(value);
                 if (!(iss >> val))
                     std::cout << "error conversion" << std::endl;
-                btc->data[btc->datecsvfused] = val;
+                data[btc->datecsvfused] = val;
             }
             veski++;
         }
@@ -30,12 +45,10 @@ void    sort_data(stru *btc){
     //print_map(btc->data);
 }
 
-void fusecsv(std::string date, stru *btc){
+void btc::fusecsv(std::string date, stru *btc){
     date.erase(4, 1);
     date.erase(6, 1);
-    //std::cout << date << std::endl;
     btc->datecsvfused = atoi(date.c_str());
-    //std::cout << "date int :: " << btc->datecsvfused << std::endl;
 }
 
 /*void print_map(std::map<std::string, float> &c){
@@ -43,7 +56,7 @@ void fusecsv(std::string date, stru *btc){
         std::cout << it->first << " : " << std::fixed << std::setprecision(2) << it->second << std::endl;
 }*/
 
-void read_input(char *input, stru *btc){
+void btc::read_input(char *input, stru *btc){
     std::ifstream in(input);
     size_t      found;
     int veski = 0;
@@ -66,8 +79,6 @@ void read_input(char *input, stru *btc){
                 }
                 btc->date = btc->line.substr(0, found - 1);
                 btc->value = btc->line.substr(found + 2);
-                //std::cout << btc->value << std::endl;
-                //std::cout << btc->date << "e" << std::endl;
                 std::istringstream iss(btc->value);
                 if (!(iss >> btc->val))
                     std::cout << "errorrrrrr conversion" << std::endl;
@@ -85,7 +96,7 @@ void read_input(char *input, stru *btc){
     }
 }
 
-int pars(stru *btc){
+int btc::pars(stru *btc){
     std::string y;
     std::string m;
     std::string d;
@@ -109,14 +120,12 @@ int pars(stru *btc){
     btc->months = atoi(m.c_str());
     btc->days = atoi(d.c_str());
 
-    //std::cout << y << std::endl;
     for (int i = 0; i < 4; i++){
         if (!(isdigit(y[i])) || (btc->year > 2025 || btc->year < 2009)){
             std::cout << "years not right" << std::endl;
             return 1;
         }
     }
-    //std::cout << "survivor" << std::endl;
     for (int i = 0; i < 2; i++){
         if (!(isdigit(m[i])) || (btc->months > 12 || btc->months < 0)){
             std::cout << "months not right" << std::endl;
@@ -152,7 +161,7 @@ int pars(stru *btc){
     return 0;
 }
 
-int parsval(stru *btc){
+int btc::parsval(stru *btc){
     std::istringstream iss(btc->value);
     if (!(iss >> btc->val)){
         std::cout << "errorrrrrr conversion" << std::endl;
@@ -165,26 +174,25 @@ int parsval(stru *btc){
     return 0;
 }
 
-void fuseinput(stru *btc){
+void btc::fuseinput(stru *btc){
     btc->date.erase(4, 1);
     btc->date.erase(6, 1);
     btc->dateinputfused = atoi(btc->date.c_str());
-    //std::cout << btc->date << " l'inuput fused : " << btc->dateinputfused << std::endl;
 }
 
-void apply_ExRate(stru *btc){
+void btc::apply_ExRate(stru *btc){
     std::map<int, float>::iterator it;
-    it = btc->data.find(btc->dateinputfused);
+    it = data.find(btc->dateinputfused);
     std::string convertit;
-    if (it != btc->data.end()){
+    if (it != data.end()){
         btc->date.insert(4, "-");
         btc->date.insert(7, "-");
         std::cout << btc->date << " => " << btc->val << " = " << btc->val * it->second << std::endl;
     }
     else{
-        it = btc->data.lower_bound(btc->dateinputfused);
+        it = data.lower_bound(btc->dateinputfused);
         it--;
-        if (it != btc->data.end()){
+        if (it != data.end()){
             btc->date.insert(4, "-");
             btc->date.insert(7, "-");
             std::cout << btc->date << " => " << btc->val << " = " << btc->val * it->second << std::endl;
